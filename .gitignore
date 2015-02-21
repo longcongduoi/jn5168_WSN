@@ -1,0 +1,9 @@
+*.[oad]
+*.pdf
+*.bin
+*.elf
+.metadata
+build
+*.map
+*.ond
+~*
