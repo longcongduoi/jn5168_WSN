@@ -65,48 +65,85 @@ extern "C" {
 /***        Macro Definitions                                             ***/
 /****************************************************************************/
 
-/** Minimum channel number */
-#define CHANNEL_MIN						11
-/** Maximum channel number */
-#define CHANNEL_MAX						26
+#define ABS(Number) 	((Number < 0) ? (Number*(-1)) : (Number))// Модуль числа
 
-/** Bitmap of all available channels */
-#define GATEWAY_ALL_CHANNELS_BITMAP     0x7fff800
+// Appropriate network standard profile [0-9] or user profile [255]// Profile inherited by devices that join the network to join the network
+#define CURRENT_NETWORK_JOIN_PROFILE 	0// JN-UG-3080, Section 9.2
 
-/** Number of buffers for JIP stack */
-#define PACKET_BUFFERS                  3
+// Appropriate network standard profile [0-9] or user profile [255]// Profile inherited by devices that join the network to run the network
+#define CURRENT_NETWORK_RUN_PROFILE		0// JN-UG-3080, Section 9.2
 
-/** Size of routing table */
+// Bitmap of all available channels
+#define NETWORK_GATEWAY_ALL_CHANNELS_BITMAP     0x7fff800
+
+// All network nodes address prefix
+#define NETWORK_ADDRESS_PREFIX		 0xfd040bd380e80002ULL
+
+// Number of buffers for JIP stack
+#define PACKET_BUFFERS                  2
+
+// Size of routing table
 #define ROUTE_TABLE_ENTRIES             300
 
-/** Maximum length of name strings */
+// Maximum length of name strings
 #define MAX_NAME_LENGTH					16
 
-/** Default UART settings */
-#ifndef HOST_BAUD_RATE
-#define HOST_BAUD_RATE                  921600
-#endif
+#define FIRMWARE "5.0.0"
 
-/** Default baud rate is UART_DEBUG is defined */
-#ifndef DBG_BAUD_RATE
-#define DBG_BAUD_RATE                   DBG_E_UART_BAUD_RATE_115200
-#endif
+//-------------------------------------------------------------------------------------------------------
+// Настройки координатора
 
-/** Default uart connected to host */
-#ifndef HOST_UART
-#define HOST_UART                       E_AHI_UART_0
-#endif
+PUBLIC typedef enum{
 
-/* Set debug uart to the one not connected to host */
-#if (HOST_UART == 0)
-#define DBG_UART                        DBG_E_UART_1
-#else
-#define DBG_UART                        DBG_E_UART_0
-#endif
+	dtCoordinator = 0,
+	dtRouter,
+	dtEndDevice,
+	dtPC
+}MainDevType;
 
+extern const uint8 MAIN_MAX_DEVICE_COUNT;
+extern bool MAIN_EDUART_ENABLE;
+extern uint8 MAIN_HARD_VERSION;
+
+#define MAIN_DEVICE_TYPE 			0 // 0 - coordinator, 1 - router, 2 - enddevice, 3 - pc
+#define HARDTYPE 					3001
+
+#define CONFIG_DEFAULT_NETID 		19
+#define CONFIG_HARD_VERSION  		2// теперь я его не использую
+
+#define SOFT_VERSION1 				3
+#define SOFT_VERSION2 				4
+#define SOFT_VERSION3 				0
+
+#define PREFMODEL 					"AG-"
+#define PREFNAME 					'C'
+
+#define WATCHDOG_INTERNAL
+#define DEBUG_LIGHT
+//----------------------------------------------------------------------------------------------------------------
+// Вывода
+
+//#define WATCHDOG_IMPULSE			E_AHI_DIO7_INT// Сброс внешнего сторожевого тамера
+#define EXTERN_VCC_ON_OFF 			E_AHI_DIO8_INT// UPS
+#define DIP_1 						E_AHI_DIO4_INT// 1 дип-переключателя
+#define DIP_2 						E_AHI_DIO5_INT// 2 дип-переключателя
+#define I2C_SCL 					E_AHI_DIO13_INT// SCL I2C
+#define I2C_SDA 					E_AHI_DIO14_INT// SDA I2C
+#define WDTIMER 					E_AHI_DIO19_INT// сторожевой таймер
+#define LED_RED 					E_AHI_DIO15_INT
+#define LED_GREEN		 			E_AHI_DIO16_INT
+#define LED_BLUE 					E_AHI_DIO17_INT
+
+#define RDX_48
 /****************************************************************************/
 /***        Type Definitions                                              ***/
 /****************************************************************************/
+
+#define BCD_WHOLE_LENGTH	6// Длина целой части числа + один полубайт под знак// Только чётное число
+#define BCD_FRACTION_LENGTH	2// Длина дробной части числа// Только чётное число
+#define BCD_TYPE_MAXIMUM	0x9999999// Максимальное значение, которое может быть сохранено в BCD
+
+typedef int32 Bcd_t;// Двоично-десятичный тип// Последний байт дробная часть -> максимальное число 9999.99
 
 /****************************************************************************/
 /***        Exported Functions                                            ***/
